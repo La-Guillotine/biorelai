@@ -1,4 +1,3 @@
-const { promises } = require('fs');
 const con = require('./db.js');
 
 //User object constructor
@@ -11,7 +10,7 @@ let User = function(data){
 User.getAll = () => {
     return new Promise((resolve, reject) => {
         con.query("Select * from Intervenant", (err, result, fields) => {
-            console.log(result);
+            // console.log(result);
             if (err) reject(err);
             else resolve(result);
         });
@@ -20,9 +19,9 @@ User.getAll = () => {
 User.getUserById = (UserId) => {
     return new Promise((resolve, reject) => {
         con.query("Select * from Intervenant where IDINT = ? ", UserId, (err, result, fields) => {
-            console.log(result);
+            // console.log(result);
             if (err) reject(err);
-            else resolve(result);
+            else resolve(result[0]);
         });
     });
 };
@@ -32,14 +31,18 @@ User.createUser = function (newUser, result) {
             console.log("error: ", err);
         }
         else{
-            console.log(res.insertId);
+            console.log("InsertId : " + res.insertId);
             return res.insertId;
         }
     });           
 };
-User.updateById = function(id, User, result){
+User.updateById = function(id, user, result){
     return new Promise((resolve, reject) => {
-        con.query("UPDATE Intervenant SET Intervenant = ? where IDINT = ? ", [User, id], (err, result, fields) => {
+        con.query(`UPDATE Intervenant 
+        SET NOM = ${con.escape(user.NOM)},
+        PRENOM = ${con.escape(user.PRENOM)},
+        MDP = ${con.escape(user.MDP)}
+         where IDINT = ? `, id, (err, result, fields) => {
             console.log(result);
             if (err) reject(err);
             else resolve(result);

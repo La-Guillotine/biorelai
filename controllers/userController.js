@@ -4,7 +4,7 @@ const saltRounds = 10;
     
 exports.getUsers = async (req,res) => {
     User.getAll().then((users) => {
-        console.log(users);
+        // console.log(users);
         res.send(JSON.stringify(users));
     });
 }
@@ -16,28 +16,43 @@ exports.getUser = async (req, res) => {
 }
 
 exports.addUser = async function(req, res){
-    let mdpHash = bcrypt.hash(req.body.mdp, saltRounds, function(err, hash) {
-        if(err){
-            console.error(err);
+    let newUser;
+    getMdpHash(req.body.mdp).then(async (mdp) => {
+        // console.log(mdp);
+        newUser = {
+            nom: req.body.nom,
+            prenom: req.body.prenom,
+            mdp:mdp
         }
-        else{
-            return hash;
-        }
+        let insertId = await User.createUser(newUser);
+        res.send("InsertId : " + insertId);
     });
-    console.log(mdpHash);
-    let newUser = {
-        nom: req.body.nom,
-        prenom: req.body.prenom,
-        mdp:mdpHash
-    }
-    let insertId = await user.createUser(newUser);
-    console.log(insertId);
 }
 
-exports.updateUser = async function(user){
-
+exports.updateUser = async function(req, res){
+    User.getUserById(req.params.id).then(async (user) => {
+        console.log(req.body);
+        if(req.body.prenom) user.PRENOM = req.body.prenom;
+        if(req.body.nom) user.NOM = req.body.nom;
+        if(req.body.mdp) await getMdpHash(req.body.mdp).then(mdp => user.MDP = mdp);
+        console.log(user);
+        User.updateById(req.params.id, user).then((result) => {
+            res.send(result);
+        });
+    });
 }
 
-exports.removeUser = async function(id){
-    
+exports.removeUser = async function(req,res){
+    User.remove(req.params.id).then((result) => {
+        res.send(result);
+    })
+}
+
+async function getMdpHash(plainedPassword){
+    return new Promise((resolve, reject) => {
+        bcrypt.hash(plainedPassword, saltRounds, function(err, hash) {
+            if (err) reject(err);
+            else resolve(hash);
+        });
+    });
 }
