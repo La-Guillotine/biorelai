@@ -1,9 +1,6 @@
 const Producer = require('../models/producers');
-const Product = require('../models/products');
 const User = require('../models/user');
 const userController = require('./userController');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 exports.getProducers = async (req,res) => {
     Producer.getAll().then((producers) => {

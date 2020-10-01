@@ -41,7 +41,13 @@ Product.update = (productId, product) => {
 }
 
 Product.remove = (productId) => {
-
+    return new Promise((resolve, reject) => {
+        con.query("Delete From Produit Where CODEP = ?",productId, (err, result, fields) => {
+            // console.log(result);
+            if (err) reject(err);
+            else resolve(result[0]);
+        });
+    });
 }
 
 module.exports = Product;
