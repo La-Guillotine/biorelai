@@ -10,7 +10,8 @@ router.use(function timeLog(req, res, next) {
 
 router.get('/', producersController.getProducers);
 router.get('/:id', producersController.getProducer);
-// router.post('/', categorieController.addCategorie);
-// router.delete('/:id',categorieController.remove);
+router.post('/', producersController.createProducer);
+router.put('/:id', producersController.updateProducer);
+router.delete('/:id',producersController.removeProducer);
 
 module.exports = router;

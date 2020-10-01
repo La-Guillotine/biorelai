@@ -25,8 +25,8 @@ User.getUserById = (UserId) => {
         });
     });
 };
-User.createUser = function (newUser, result) {    
-    con.query("INSERT INTO Intervenant set ?", newUser, function (err, res) {    
+User.createUser = function (newUser) {    
+    con.query("INSERT INTO Intervenant VALUES (NULL, ?, ?, ?)", [newUser.nom, newUser.prenom, newUser.mdp], function (err, res) {    
         if(err) {
             console.log("error: ", err);
         }
@@ -36,7 +36,7 @@ User.createUser = function (newUser, result) {
         }
     });           
 };
-User.updateById = function(id, user, result){
+User.updateById = function(id, user){
     return new Promise((resolve, reject) => {
         con.query(`UPDATE Intervenant 
         SET NOM = ${con.escape(user.NOM)},

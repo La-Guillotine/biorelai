@@ -48,7 +48,7 @@ exports.removeUser = async function(req,res){
     })
 }
 
-async function getMdpHash(plainedPassword){
+exports.getMdpHash = (plainedPassword) => {
     return new Promise((resolve, reject) => {
         bcrypt.hash(plainedPassword, saltRounds, function(err, hash) {
             if (err) reject(err);
