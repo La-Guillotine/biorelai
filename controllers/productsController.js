@@ -12,18 +12,28 @@ exports.getOneProduct = async (req, res) => {
 }
 
 exports.addProduct = async(req, res) => {
-    Product.create(req.params.id).then(result => {
-        res.send(JSON.stringify(result));
+    Product.create(req.params.id,req.body).then(insertId => {
+        res.send(JSON.stringify("InsertId : " + insertId));
     });
 }
 
 exports.updateProduct = async(req, res) => {
-    Product.create(req.params.id).then(result => {
-        res.send(JSON.stringify(result));
+    Product.getOne(req.params.productId).then((product) => {
+        console.log(product);
+        if(req.body.codeCat) product.CODECAT = req.body.codeCat;
+        if(req.body.nom) product.NOMPRODUIT = req.body.nom;
+        if(req.body.description) product.DESCRIPTIFPRODUIT = req.body.description;
+        if(req.body.prixU) product.PRIXUNITAIRE = req.body.prixU;
+        if(req.body.unite) product.UNITE = req.body.unite;
+        console.log(product);
+
+        Product.update(product).then(result => {
+            res.send(JSON.stringify(result));
+        });
     });
 }
 exports.removeProduct = async (req, res) => {
-    Product.remove(req.params.id).then( result => {
+    Product.remove(req.params.productId).then( result => {
         res.send(JSON.stringify(result));
     });
 }
