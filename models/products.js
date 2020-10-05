@@ -36,6 +36,18 @@ Product.getOne = (productId) => {
     });
 }
 
+Product.getByOrder = (orderId) => {
+    return new Promise((resolve, reject) => {
+        con.query(`Select * from Produit 
+        JOIN produits_commander ON Produit.CODEP = produits_commander.CODEP
+        Where IDCOMMANDE = ?`,orderId, (err, result, fields) => {
+            // console.log(result);
+            if (err) reject(err);
+            else resolve(result);
+        });
+    });
+}
+
 Product.create = (producerId, product) => {
     return new Promise((resolve, reject) => {
         con.query("Insert Into Produit VALUES (NULL,?,?,?,?,?,?)",

@@ -7,20 +7,34 @@ let Order = function(data){
     this.created_at = new Date();
 };
 
-Order.getAll = () => {
-
-}
-
 Order.getOne = (orderId) => {
-
+    return new Promise((resolve, reject) => {
+        con.query("SELECT * FROM commande WHERE IDCOMMANDE = ?", orderId, (err, result, fields) => {
+            // console.log(result);
+            if (err) reject(err);
+            else resolve(result[0]);
+        });
+    });
 }
 
 Order.getBySemaine = (idSemaine) => {
-
+    return new Promise((resolve, reject) => {
+        con.query("SELECT * FROM commande WHERE IDSEM = ?",idSemaine, (err, result, fields) => {
+            // console.log(result);
+            if (err) reject(err);
+            else resolve(result);
+        });
+    });
 }
 
 Order.getByCustomer = (customerId) => {
-
+    return new Promise((resolve, reject) => {
+        con.query("SELECT * FROM commande WHERE IDINT = ?", customerId, (err, result, fields) => {
+            // console.log(result);
+            if (err) reject(err);
+            else resolve(result);
+        });
+    });
 }
 
 Order.getByProducer = (producerId) => {
@@ -35,3 +49,5 @@ Order.getByProducer = (producerId) => {
         });
     }); 
 }
+
+module.exports = Order;
