@@ -1,5 +1,4 @@
 const express = require('express');
-const mysql = require('mysql');
 const app = express();
 
 const user_route = require('./api-routes/user');
