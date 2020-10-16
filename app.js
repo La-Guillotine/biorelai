@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 const user_route = require('./api-routes/user');
 const categorie_route = require('./api-routes/categorie');
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended : true
 }));
+app.use(cors());
 
 // Home page route.
 app.get('/', function (req, res) {
